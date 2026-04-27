@@ -2,7 +2,7 @@
     --sw-yellow: #ffe81f;
     --space-black: #000000;
     --star-white: #ffffff;
-    --sith-red: #ff0000;
+    --card-bg: #222222;
 }
 
 body {
@@ -10,12 +10,13 @@ body {
     margin: 0;
     background-color: #111;
     color: var(--star-white);
+    line-height: 1.6;
 }
 
 header {
     background-color: var(--space-black);
     border-bottom: 2px solid var(--sw-yellow);
-    padding: 2rem;
+    padding: 2rem 1rem;
     text-align: center;
 }
 
@@ -23,27 +24,30 @@ header h1 {
     font-family: 'Orbitron', sans-serif;
     color: var(--sw-yellow);
     margin: 0;
-    text-transform: uppercase;
+    font-size: 2rem;
 }
 
+/* Controles Responsivos */
 .controls {
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Por defecto en columna para móviles */
+    align-items: center;
     padding: 20px;
-    gap: 10px;
+    gap: 15px;
 }
 
 input {
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
     border: 1px solid var(--sw-yellow);
     background: #222;
     color: white;
-    width: 250px;
+    width: 100%; /* Ocupa todo el ancho en móviles */
+    max-width: 400px; /* Pero no se estira infinito en PC */
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     background-color: var(--sw-yellow);
     color: black;
     border: none;
@@ -51,37 +55,52 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
+    width: 100%;
+    max-width: 200px;
 }
 
 button:hover {
     background-color: white;
-    box-shadow: 0 0 10px var(--sw-yellow);
+    box-shadow: 0 0 15px var(--sw-yellow);
 }
 
+/* Grid de personajes */
 #resultados {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    /* Ajusta el número de columnas según el ancho disponible */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
     padding: 20px;
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .card {
-    background: #222;
+    background: var(--card-bg);
     border: 1px solid #444;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 12px;
     text-align: center;
-    transition: transform 0.3s;
+    transition: 0.3s;
 }
 
 .card:hover {
-    transform: scale(1.05);
+    transform: translateY(-10px);
     border-color: var(--sw-yellow);
 }
 
-.card h3 {
-    color: var(--sw-yellow);
-    margin-top: 0;
+/* MEDIA QUERIES - El toque profesional para el Responsive */
+@media (min-width: 600px) {
+    header h1 {
+        font-size: 3rem;
+    }
+
+    .controls {
+        flex-direction: row; /* En pantallas medianas/grandes se ponen uno al lado del otro */
+        justify-content: center;
+    }
+
+    input, button {
+        width: auto; /* Vuelven a su tamaño normal */
+    }
 }
