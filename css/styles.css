@@ -1,119 +1,87 @@
-/* Variables de color - Requisito: Paleta coherente */
 :root {
-    --marvel-red: #ed1d24;
-    --dark-bg: #151515;
-    --light-text: #ffffff;
-    --card-bg: #ffffff;
-    --gray-text: #555555;
+    --sw-yellow: #ffe81f;
+    --space-black: #000000;
+    --star-white: #ffffff;
+    --sith-red: #ff0000;
 }
 
-/* Configuración básica y tipografía */
 body {
-    font-family: 'Roboto', sans-serif; /* Requisito: Tipografía legible */
+    font-family: 'Roboto', sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: var(--dark-bg);
+    background-color: #111;
+    color: var(--star-white);
 }
 
-/* Header - Estilo profesional */
 header {
-    background-color: var(--marvel-red);
-    color: var(--light-text);
-    padding: 2rem 1rem;
+    background-color: var(--space-black);
+    border-bottom: 2px solid var(--sw-yellow);
+    padding: 2rem;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 header h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--sw-yellow);
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 2.5rem;
 }
 
-/* Sección de controles (Buscador y Botón) */
 .controls {
     display: flex;
     justify-content: center;
-    gap: 10px;
     padding: 20px;
-    flex-wrap: wrap; /* Para que sea responsive */
+    gap: 10px;
 }
 
-input[type="text"] {
-    padding: 10px 15px;
-    border: 2px solid #ddd;
+input {
+    padding: 10px;
     border-radius: 5px;
+    border: 1px solid var(--sw-yellow);
+    background: #222;
+    color: white;
     width: 250px;
-    font-size: 1rem;
 }
 
-/* Botón con estado Hover - Requisito Parte 3 */
 button {
     padding: 10px 20px;
-    background-color: var(--dark-bg);
-    color: white;
+    background-color: var(--sw-yellow);
+    color: black;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: var(--marvel-red); /* Efecto hover */
+    background-color: white;
+    box-shadow: 0 0 10px var(--sw-yellow);
 }
 
-/* Contenedor de Resultados - Requisito: Grid/Flexbox */
 #resultados {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     padding: 20px;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
-/* Estilo de las Tarjetas (Cards) */
 .card {
-    background-color: var(--card-bg);
+    background: #222;
+    border: 1px solid #444;
+    padding: 20px;
     border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    text-align: center;
+    transition: transform 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Pequeña animación al pasar el mouse */
+    transform: scale(1.05);
+    border-color: var(--sw-yellow);
 }
 
-.card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-bottom: 4px solid var(--marvel-red);
-}
-
-.card-info {
-    padding: 15px;
-}
-
-.card-info h3 {
-    margin: 0 0 10px 0;
-    color: var(--dark-bg);
-}
-
-.card-info p {
-    font-size: 0.9rem;
-    color: var(--gray-text);
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: var(--dark-bg);
-    color: white;
-    margin-top: 40px;
+.card h3 {
+    color: var(--sw-yellow);
+    margin-top: 0;
 }
