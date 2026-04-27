@@ -1,90 +1,62 @@
-// 1. SELECCIÓN DE ELEMENTOS DEL DOM (Parte 4 - 15 pts)
 const btnCargar = document.getElementById('btnCargar');
 const contenedor = document.getElementById('resultados');
 const inputBusqueda = document.getElementById('inputBusqueda');
 
-/**
- * 2. FUNCIÓN ASÍNCRONA PARA EL CONSUMO DE API (Parte 5 - 25 pts)
- * Realiza la petición a SWAPI y maneja los estados de la consulta.
- */
-async function cargarDatos() {
-    const busqueda = inputBusqueda.value.trim();
+async function buscarPokemon() {
+    const nombre = inputBusqueda.value.toLowerCase().trim();
     
-    // Mostrar mensaje de 'Cargando...' mientras se espera la respuesta (Punto 152)
-    contenedor.innerHTML = '<p class="mensaje">Buscando en los archivos de la galaxia...</p>';
+    // Estado de carga
+    contenedor.innerHTML = '<p class="mensaje">Buscando en la hierba alta...</p>';
 
-    // Construcción de la URL - Reto Final: Buscador (Punto 182)
-    // Usamos HTTPS para evitar errores de conexión (Failed to fetch)
-    let url = 'https://swapi.dev/api/people/';
-    if (busqueda) {
-        url = `https://swapi.dev/api/people/?search=${busqueda}`;
+    // La URL cambia según si el usuario escribe algo o no
+    let url = 'https://pokeapi.co/api/v2/pokemon/';
+    if (nombre) {
+        url = `https://pokeapi.co/api/v2/pokemon/${nombre}`;
+    } else {
+        // Si no hay nombre, traemos los primeros 12 por defecto
+        url = 'https://pokeapi.co/api/v2/pokemon?limit=12';
     }
 
-    // Manejo de errores con try/catch (Punto 151)
     try {
         const response = await fetch(url);
-
-        // Validar si la respuesta es exitosa
+        
         if (!response.ok) {
-            throw new Error('No se pudo conectar con el servidor de Star Wars');
+            throw new Error('¡Ese Pokémon no fue encontrado!');
         }
 
-        // Convertir respuesta a JSON (Punto 150)
         const data = await response.json();
-        const personajes = data.results;
+        contenedor.innerHTML = ''; // Limpiar contenedor antes de cargar
 
-        // Limpiar el contenedor antes de insertar nuevos datos (Punto 134)
-        contenedor.innerHTML = '';
-
-        // Validar si la API devolvió resultados
-        if (personajes.length === 0) {
-            contenedor.innerHTML = '<p class="mensaje">No se encontraron personajes con ese nombre.</p>';
-            return;
+        // La PokeAPI devuelve datos diferentes si es un solo pokemon o una lista
+        if (nombre) {
+            crearTarjeta(data);
+        } else {
+            // Si es una lista, necesitamos obtener el detalle de cada uno
+            for (let p of data.results) {
+                const resIndividual = await fetch(p.url);
+                const dataIndividual = await resIndividual.json();
+                crearTarjeta(dataIndividual);
+            }
         }
-
-        /**
-         * 3. MANIPULACIÓN DEL DOM (Parte 4 y 5)
-         * Pintamos al menos 6 elementos si están disponibles (Punto 154)
-         */
-        personajes.forEach(personaje => {
-            // Crear el elemento de la tarjeta (Punto 133)
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            // Insertar información usando Template Literals
-            card.innerHTML = `
-                <h3>${personaje.name}</h3>
-                <div class="card-info">
-                    <p><strong>Año de nacimiento:</strong> ${personaje.birth_year}</p>
-                    <p><strong>Género:</strong> ${personaje.gender}</p>
-                    <p><strong>Estatura:</strong> ${personaje.height} cm</p>
-                    <p><strong>Color de ojos:</strong> ${personaje.eye_color}</p>
-                </div>
-            `;
-            
-            // Agregar al contenedor (Punto 133)
-            contenedor.appendChild(card);
-        });
 
     } catch (error) {
-        // Mostrar mensaje claro si falla la petición (Punto 153)
-        console.error("Error técnico:", error);
-        contenedor.innerHTML = `
-            <div class="error-mensaje">
-                <p>⚠️ Ups, ocurrió un error: ${error.message}</p>
-                <p>Por favor, revisa tu conexión e intenta de nuevo.</p>
-            </div>
-        `;
+        contenedor.innerHTML = `<p class="mensaje-error">⚠️ Error: ${error.message}</p>`;
     }
 }
 
-// 4. EVENT LISTENERS (Parte 4)
-// Escuchar el clic en el botón para disparar la función (Punto 132)
-btnCargar.addEventListener('click', cargarDatos);
+function crearTarjeta(pokemon) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    // Usamos Template Literals para insertar los datos (Nombre, Imagen, Tipo)
+    card.innerHTML = `
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+        <h3>${pokemon.name}</h3>
+        <p><strong>ID:</strong> #${pokemon.id}</p>
+        <span class="tipo">${pokemon.types[0].type.name}</span>
+    `;
+    
+    contenedor.appendChild(card);
+}
 
-// Mejora de experiencia: Buscar también al presionar la tecla "Enter"
-inputBusqueda.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        cargarDatos();
-    }
-});
+btnCargar.addEventListener('click', buscarPokemon);
