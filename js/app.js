@@ -1,72 +1,90 @@
-// 1. Selección de elementos del DOM
+// 1. SELECCIÓN DE ELEMENTOS DEL DOM (Parte 4 - 15 pts)
 const btnCargar = document.getElementById('btnCargar');
 const contenedor = document.getElementById('resultados');
 const inputBusqueda = document.getElementById('inputBusqueda');
 
-// 2. Función principal asíncrona
-async function obtenerPersonajes() {
-    const nombrePersona = inputBusqueda.value.trim();
+/**
+ * 2. FUNCIÓN ASÍNCRONA PARA EL CONSUMO DE API (Parte 5 - 25 pts)
+ * Realiza la petición a SWAPI y maneja los estados de la consulta.
+ */
+async function cargarDatos() {
+    const busqueda = inputBusqueda.value.trim();
     
-    // Estado de carga - Requisito Parte 5
-    contenedor.innerHTML = '<p class="mensaje">Buscando en los archivos de la Antigua República...</p>';
+    // Mostrar mensaje de 'Cargando...' mientras se espera la respuesta (Punto 152)
+    contenedor.innerHTML = '<p class="mensaje">Buscando en los archivos de la galaxia...</p>';
 
-    // IMPORTANTE: Usar siempre HTTPS para evitar el error "Failed to fetch"
+    // Construcción de la URL - Reto Final: Buscador (Punto 182)
+    // Usamos HTTPS para evitar errores de conexión (Failed to fetch)
     let url = 'https://swapi.dev/api/people/';
-    
-    // Funcionalidad extra: Buscador - Requisito Reto Final
-    if (nombrePersona) {
-        url = `https://swapi.dev/api/people/?search=${nombrePersona}`;
+    if (busqueda) {
+        url = `https://swapi.dev/api/people/?search=${busqueda}`;
     }
 
+    // Manejo de errores con try/catch (Punto 151)
     try {
-        const respuesta = await fetch(url);
+        const response = await fetch(url);
 
-        // Si la respuesta no es 200-299, lanzamos error - Requisito Parte 5
-        if (!respuesta.ok) {
-            throw new Error(`Error de servidor: ${respuesta.status}`);
+        // Validar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error('No se pudo conectar con el servidor de Star Wars');
         }
 
-        const datos = await respuesta.json();
-        const personajes = datos.results;
+        // Convertir respuesta a JSON (Punto 150)
+        const data = await response.json();
+        const personajes = data.results;
 
-        contenedor.innerHTML = ''; // Limpiar contenedor - Requisito Parte 4
+        // Limpiar el contenedor antes de insertar nuevos datos (Punto 134)
+        contenedor.innerHTML = '';
 
+        // Validar si la API devolvió resultados
         if (personajes.length === 0) {
-            contenedor.innerHTML = '<p class="mensaje">No se encontraron registros de ese personaje.</p>';
+            contenedor.innerHTML = '<p class="mensaje">No se encontraron personajes con ese nombre.</p>';
             return;
         }
 
-        // 3. Pintar resultados en pantalla (Mínimo 6 elementos) - Requisito Parte 5
+        /**
+         * 3. MANIPULACIÓN DEL DOM (Parte 4 y 5)
+         * Pintamos al menos 6 elementos si están disponibles (Punto 154)
+         */
         personajes.forEach(personaje => {
-            const tarjeta = document.createElement('div');
-            tarjeta.className = 'card';
-            tarjeta.innerHTML = `
+            // Crear el elemento de la tarjeta (Punto 133)
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Insertar información usando Template Literals
+            card.innerHTML = `
                 <h3>${personaje.name}</h3>
-                <div class="info-detallada">
-                    <p><strong>Especie:</strong> Humanoide</p>
-                    <p><strong>Año nacimiento:</strong> ${personaje.birth_year}</p>
+                <div class="card-info">
+                    <p><strong>Año de nacimiento:</strong> ${personaje.birth_year}</p>
                     <p><strong>Género:</strong> ${personaje.gender}</p>
                     <p><strong>Estatura:</strong> ${personaje.height} cm</p>
+                    <p><strong>Color de ojos:</strong> ${personaje.eye_color}</p>
                 </div>
             `;
-            contenedor.appendChild(tarjeta);
+            
+            // Agregar al contenedor (Punto 133)
+            contenedor.appendChild(card);
         });
 
     } catch (error) {
-        // Manejo de errores visual corregido - Requisito Parte 5
-        console.error("Detalle del error:", error);
+        // Mostrar mensaje claro si falla la petición (Punto 153)
+        console.error("Error técnico:", error);
         contenedor.innerHTML = `
-            <div class="error-container">
-                <p>⚠️ Ups, ocurrió un error galáctico: ${error.message}</p>
-                <p>Verifica tu conexión a internet e intenta de nuevo.</p>
+            <div class="error-mensaje">
+                <p>⚠️ Ups, ocurrió un error: ${error.message}</p>
+                <p>Por favor, revisa tu conexión e intenta de nuevo.</p>
             </div>
         `;
     }
 }
 
-// 4. Event Listeners
-btnCargar.addEventListener('click', obtenerPersonajes);
+// 4. EVENT LISTENERS (Parte 4)
+// Escuchar el clic en el botón para disparar la función (Punto 132)
+btnCargar.addEventListener('click', cargarDatos);
 
+// Mejora de experiencia: Buscar también al presionar la tecla "Enter"
 inputBusqueda.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') obtenerPersonajes();
+    if (e.key === 'Enter') {
+        cargarDatos();
+    }
 });
