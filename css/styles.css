@@ -1,106 +1,94 @@
 :root {
-    --sw-yellow: #ffe81f;
-    --space-black: #000000;
-    --star-white: #ffffff;
-    --card-bg: #222222;
+    --poke-blue: #3B4CCA;
+    --poke-yellow: #FFDE00;
+    --poke-red: #CC0000;
+    --bg-light: #f0f0f0;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
-    background-color: #111;
-    color: var(--star-white);
-    line-height: 1.6;
+    background-color: var(--bg-light);
+    color: #333;
 }
 
 header {
-    background-color: var(--space-black);
-    border-bottom: 2px solid var(--sw-yellow);
-    padding: 2rem 1rem;
+    background-color: var(--poke-red);
+    color: white;
+    padding: 2rem;
     text-align: center;
+    border-bottom: 5px solid var(--poke-blue);
 }
 
-header h1 {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--sw-yellow);
-    margin: 0;
-    font-size: 2rem;
-}
-
-/* Controles Responsivos */
 .controls {
     display: flex;
-    flex-direction: column; /* Por defecto en columna para móviles */
-    align-items: center;
-    padding: 20px;
-    gap: 15px;
+    justify-content: center;
+    padding: 30px;
+    gap: 10px;
+    flex-wrap: wrap; /* Responsive básico */
 }
 
 input {
     padding: 12px;
-    border-radius: 5px;
-    border: 1px solid var(--sw-yellow);
-    background: #222;
-    color: white;
-    width: 100%; /* Ocupa todo el ancho en móviles */
-    max-width: 400px; /* Pero no se estira infinito en PC */
+    border-radius: 25px;
+    border: 2px solid var(--poke-blue);
+    width: 250px;
+    outline: none;
 }
 
 button {
     padding: 12px 25px;
-    background-color: var(--sw-yellow);
-    color: black;
-    border: none;
-    border-radius: 5px;
+    background-color: var(--poke-yellow);
+    color: var(--poke-blue);
+    border: 2px solid var(--poke-blue);
+    border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
-    width: 100%;
-    max-width: 200px;
+    transition: 0.3s; /* Efecto hover */
 }
 
 button:hover {
-    background-color: white;
-    box-shadow: 0 0 15px var(--sw-yellow);
+    background-color: var(--poke-blue);
+    color: white;
 }
 
-/* Grid de personajes */
 #resultados {
     display: grid;
-    /* Ajusta el número de columnas según el ancho disponible */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Grid responsive */
+    gap: 20px;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .card {
-    background: var(--card-bg);
-    border: 1px solid #444;
-    padding: 25px;
-    border-radius: 12px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
     text-align: center;
-    transition: 0.3s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
 }
 
 .card:hover {
     transform: translateY(-10px);
-    border-color: var(--sw-yellow);
 }
 
-/* MEDIA QUERIES - El toque profesional para el Responsive */
-@media (min-width: 600px) {
-    header h1 {
-        font-size: 3rem;
-    }
+.card img {
+    width: 150px;
+    height: 150px;
+}
 
-    .controls {
-        flex-direction: row; /* En pantallas medianas/grandes se ponen uno al lado del otro */
-        justify-content: center;
-    }
+.card h3 {
+    text-transform: capitalize;
+    color: var(--poke-blue);
+}
 
-    input, button {
-        width: auto; /* Vuelven a su tamaño normal */
-    }
+.tipo {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    background: #e0e0e0;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
